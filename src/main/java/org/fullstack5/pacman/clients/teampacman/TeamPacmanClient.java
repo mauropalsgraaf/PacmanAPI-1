@@ -7,8 +7,13 @@ import org.fullstack5.pacman.api.models.response.GameState;
 import org.fullstack5.pacman.api.models.response.PlayerRegistered;
 import org.fullstack5.pacman.clients.teampacman.ghosts.AStarGhostAI;
 import org.fullstack5.pacman.clients.teampacman.ghosts.RandomGhostAI;
+import org.fullstack5.pacman.clients.teampacman.pacman.BossPacmanAI;
+import org.fullstack5.pacman.clients.teampacman.pacman.MyPacmanAI;
 import org.fullstack5.pacman.clients.teampacman.pacman.RandomPacmanAI;
 import reactor.core.publisher.Flux;
+
+import static org.fullstack5.pacman.api.models.PacmanRunner.MYIMPL;
+import static org.fullstack5.pacman.api.models.PacmanRunner.RANDOM;
 
 public final class TeamPacmanClient implements Runnable {
     private String gameId;
@@ -42,12 +47,13 @@ public final class TeamPacmanClient implements Runnable {
         if (pacmanRunner != null) {
             final PlayerRegistered player = ServerComm.registerPlayer(gameId, PlayerType.PACMAN);
             final AI pacmanAI;
-            switch (pacmanRunner) {
-                case RANDOM:
-                    pacmanAI = new RandomPacmanAI(gameId, player.getAuthId(), player.getMaze());
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown pacman runner");
+
+            if (pacmanRunner == RANDOM) {
+                pacmanAI = new AStarGhostAI(gameId, player.getAuthId(), player.getMaze());
+            } else if (pacmanRunner == MYIMPL) {
+                pacmanAI = new BossPacmanAI(gameId, player.getAuthId(), player.getMaze());
+            } else {
+                throw new IllegalArgumentException("Unknown pacman runner");
             }
             thread = new RunnerThread(pacmanAI);
             flux.subscribe(thread::updateState);
@@ -72,7 +78,7 @@ public final class TeamPacmanClient implements Runnable {
     }
 
     public static void main(final String...args) {
-        new TeamPacmanClient(null, PacmanRunner.RANDOM, GhostsRunner.RANDOM).run();
+        new TeamPacmanClient(null, MYIMPL, GhostsRunner.RANDOM).run();
     }
 
 }
