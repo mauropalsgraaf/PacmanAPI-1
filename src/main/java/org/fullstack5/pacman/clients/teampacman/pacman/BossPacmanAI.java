@@ -187,6 +187,7 @@ public class BossPacmanAI implements AI {
 
     @Override
     public final void runAI(final GameState state) {
+
         Direction direction = this.actions.get(0);
 
         actions = actions.subList(1, actions.size());
