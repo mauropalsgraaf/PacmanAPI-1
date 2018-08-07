@@ -78,7 +78,7 @@ public final class TeamPacmanClient implements Runnable {
     }
 
     public static void main(final String...args) {
-        new TeamPacmanClient(null, MYIMPL, GhostsRunner.RANDOM).run();
+        new TeamPacmanClient(null, MYIMPL, GhostsRunner.ASTAR).run();
     }
 
 }
