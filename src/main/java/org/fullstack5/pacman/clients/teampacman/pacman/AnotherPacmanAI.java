@@ -6,7 +6,10 @@ import org.fullstack5.pacman.api.models.Piece;
 import org.fullstack5.pacman.api.models.request.MoveRequest;
 import org.fullstack5.pacman.api.models.response.GameState;
 import org.fullstack5.pacman.clients.teampacman.AI;
+import org.fullstack5.pacman.clients.teampacman.ClientUtils;
 import org.fullstack5.pacman.clients.teampacman.ServerComm;
+
+import java.util.List;
 
 public class AnotherPacmanAI implements AI {
 
@@ -20,13 +23,27 @@ public class AnotherPacmanAI implements AI {
         this.maze = maze;
     }
 
-        @Override
+    @Override
     public void runAI(GameState gameState) {
+
+        int maxAge = 400;
+
+        
+
+        List<Direction> directions = ClientUtils.getAvailableDirections(maze, gameState.getPacman());
+
+
+
+
         Direction choice = null;
+
+
     }
 
     private void performMove(final Direction direction) {
         final MoveRequest request = new MoveRequest(gameId, authId, direction, Piece.Type.PACMAN);
+
+
         ServerComm.performMove(request);
     }
 
