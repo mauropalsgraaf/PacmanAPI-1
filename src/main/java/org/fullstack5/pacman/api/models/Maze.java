@@ -1,6 +1,7 @@
 package org.fullstack5.pacman.api.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder(toBuilder = true)
 public final class Maze {
     private boolean[][] walls;
     private List<Position> dots;
@@ -36,6 +38,10 @@ public final class Maze {
 
     public final boolean isWall(final Position position) {
         return isWall(position.getX(), position.getY());
+    }
+
+    public final void turnToStone(Position pos) {
+        walls[pos.getX()][pos.getY()] = true;
     }
 
     public final int getMaxScore() {
