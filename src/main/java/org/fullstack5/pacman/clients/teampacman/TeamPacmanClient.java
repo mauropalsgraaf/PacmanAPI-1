@@ -7,6 +7,7 @@ import org.fullstack5.pacman.api.models.response.GameState;
 import org.fullstack5.pacman.api.models.response.PlayerRegistered;
 import org.fullstack5.pacman.clients.teampacman.ghosts.AStarGhostAI;
 import org.fullstack5.pacman.clients.teampacman.ghosts.RandomGhostAI;
+import org.fullstack5.pacman.clients.teampacman.pacman.AnotherPacmanAI;
 import org.fullstack5.pacman.clients.teampacman.pacman.BossPacmanAI;
 import org.fullstack5.pacman.clients.teampacman.pacman.MyPacmanAI;
 import org.fullstack5.pacman.clients.teampacman.pacman.RandomPacmanAI;
@@ -41,6 +42,7 @@ public final class TeamPacmanClient implements Runnable {
         if (gameId == null) {
             gameId = ServerComm.startGame();
         }
+
         final Flux<GameState> flux = ServerComm.establishGameStateFlux(gameId);
 
         RunnerThread thread;
@@ -51,7 +53,7 @@ public final class TeamPacmanClient implements Runnable {
             if (pacmanRunner == RANDOM) {
                 pacmanAI = new AStarGhostAI(gameId, player.getAuthId(), player.getMaze());
             } else if (pacmanRunner == MYIMPL) {
-                pacmanAI = new BossPacmanAI(gameId, player.getAuthId(), player.getMaze());
+                pacmanAI = new MyPacmanAI(gameId, player.getAuthId(), player.getMaze());
             } else {
                 throw new IllegalArgumentException("Unknown pacman runner");
             }

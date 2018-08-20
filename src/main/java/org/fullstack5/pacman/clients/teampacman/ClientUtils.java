@@ -7,6 +7,8 @@ import org.fullstack5.pacman.api.models.Position;
 import org.fullstack5.pacman.api.models.response.GameState;
 import org.fullstack5.pacman.api.models.response.MovingPiece;
 import org.fullstack5.pacman.clients.teampacman.models.WeightedPosition;
+import org.fullstack5.pacman.clients.teampacman.pacman.AnotherPacmanAI;
+import org.fullstack5.pacman.clients.teampacman.pacman.State;
 
 import java.util.*;
 
@@ -36,7 +38,7 @@ public final class ClientUtils {
         }
     }
 
-    public static Direction shortestDisDot(MovingPiece pacman, Maze maze, List<Position> dotsAndPallets) {
+    public Direction shortestDisDot(MovingPiece pacman, Maze maze, List<Position> dotsAndPallets) {
 
         Map<Direction, Position> availableDirections = getAvailableDirectionsAsMap(maze, pacman);
 
@@ -77,6 +79,10 @@ public final class ClientUtils {
         return maze.isWall(position.getX(), position.getY());
     }
 
+    public static boolean isWall(Position position, State maze) {
+        return maze.isWall(position.getX(), position.getY());
+    }
+
 
     public static boolean isDotOrPallet(List<Position> dotsPallets, Position position) {
         System.out.println("remaining dots:  "+ dotsPallets.size());
@@ -100,6 +106,47 @@ public final class ClientUtils {
             result.add(Direction.SOUTH);
         }
         if (x == 0 || !maze.isWall(x - 1, y)) {
+            result.add(Direction.WEST);
+        }
+        return result;
+    }
+
+    /**
+     * Get all free locations adjacent to the current location.
+     */
+    public static List<Direction> getAvailableDirections(final Maze maze, final Position piece) {
+        final List<Direction> result = new ArrayList<>();
+        final int x = piece.getX();
+        final int y = piece.getY();
+        if (y == 0 || !maze.isWall(x, y - 1)) {
+            result.add(Direction.NORTH);
+        }
+        if (x == maze.getWidth() - 1 || !maze.isWall(x + 1, y)) {
+            result.add(Direction.EAST);
+        }
+        if (y == maze.getHeight() - 1 || !maze.isWall(x, y + 1)) {
+            result.add(Direction.SOUTH);
+        }
+        if (x == 0 || !maze.isWall(x - 1, y)) {
+            result.add(Direction.WEST);
+        }
+        return result;
+    }
+
+    public static List<Direction> getAvailableDirections(final State state, final Position piece) {
+        final List<Direction> result = new ArrayList<>();
+        final int x = piece.getX();
+        final int y = piece.getY();
+        if (y == 0 || !state.isWall(x, y - 1)) {
+            result.add(Direction.NORTH);
+        }
+        if (x == state.getWidth() - 1 || !state.isWall(x + 1, y)) {
+            result.add(Direction.EAST);
+        }
+        if (y == state.getHeight() - 1 || !state.isWall(x, y + 1)) {
+            result.add(Direction.SOUTH);
+        }
+        if (x == 0 || !state.isWall(x - 1, y)) {
             result.add(Direction.WEST);
         }
         return result;

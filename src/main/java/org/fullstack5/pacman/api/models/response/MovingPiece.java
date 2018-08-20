@@ -3,6 +3,7 @@ package org.fullstack5.pacman.api.models.response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.fullstack5.pacman.api.models.Direction;
 import org.fullstack5.pacman.api.models.Position;
 

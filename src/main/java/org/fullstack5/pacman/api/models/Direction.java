@@ -1,11 +1,13 @@
 package org.fullstack5.pacman.api.models;
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Direction to move in.
  */
 @Getter
+@ToString
 public enum Direction {
     NORTH(90, 0, -1),
     EAST(0, 1, 0),
